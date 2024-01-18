@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Red+Hat+Display:900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Gochi+Hand');
+
+.welcome {
+  height: 60vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  background: #a5d8ff;
+}
+
+
+.welcome-text {
+  font-size: 8vw;
+  line-height: 8vw;
+  margin: 0;
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 900;
+  background: url(../images/grd5.jpg);
+  background-size: 40%;
+  background-position: 50% 50%;
+  -webkit-background-clip: text;
+  color: rgba(0,0,0,0.08);
+  animation: zoomout 10s ease 500ms forwards;
+  animation-iteration-count: infinite;
+}
+
+@keyframes zoomout {
+  from {
+    background-size: 40%;
+  }
+  to {
+    background-size: 20%;
+  }
+}
+
+.card-subtext {
+    position: relative;
+    left: 10px;
+    top: 10px;
+    font-family: 'Gochi Hand', cursive;
+    font-size: 22px !important;
+    line-height: 1.5;
+    display: inline;
+    background-image: linear-gradient(
+          transparent 50%,
+          #e1fffe 50%,
+          #b0f8ff 85%,
+          transparent 85%,
+          transparent 100%
+      );
+      background-repeat: no-repeat;
+      background-size: 0% 100%;
+      animation: animatedBackground 2s cubic-bezier(0.645, 0.045, 0.355, 1) 0.5s forwards;
+      animation-iteration-count: infinite;
+  }
+  
+  @keyframes animatedBackground {
+      to {
+          background-size: 100% 100%;
+      }
+  }
+
+  /* 980px  */
+@media (max-width: 62em) {
+    .card-subtext{
+        font-size: 30px;
+        line-height: 1.0;
+    }
+
+  }
+  
+  /* Below 560px  */
+  @media (max-width: 35em) {
+    
+  }

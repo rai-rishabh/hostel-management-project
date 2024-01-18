@@ -1,0 +1,72 @@
+CREATE TABLE adminlog (
+  username VARCHAR(100) NOT NULL PRIMARY KEY,
+  password VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE students (
+  enrollment VARCHAR(10) NOT NULL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(15) NOT NULL,
+  parentphone VARCHAR(15) NOT NULL,
+  room VARCHAR(10) NOT NULL,
+  zipcode VARCHAR(10) NOT NULL,
+  city VARCHAR(255) NOT NULL,
+  state VARCHAR(255) NOT NULL,
+  address TEXT NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
+
+CREATE TABLE attendance (
+  enrollment VARCHAR(10) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  room VARCHAR(255) NOT NULL,
+  PRIMARY KEY (enrollment),
+  FOREIGN KEY (enrollment) REFERENCES students (enrollment)
+);
+
+CREATE TABLE staff (
+  username VARCHAR(255) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE warden (
+  username VARCHAR(255) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE notices (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  heading VARCHAR(255) NOT NULL,
+  nbody TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE maintenance (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    enrollment VARCHAR(255),
+    room VARCHAR(255),
+    request_for VARCHAR(255),
+    requested_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    complete ENUM('yes', 'no') NOT NULL DEFAULT 'no'
+);
+CREATE TABLE leave_applications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255),
+  name VARCHAR(255),
+  room_no VARCHAR(255),
+  from_date DATE,
+  to_date DATE,
+  zipcode VARCHAR(255),
+  city VARCHAR(255),
+  state VARCHAR(255),
+   status VARCHAR(255),
+  address TEXT,
+  reason TEXT,
+  no_of_days INT,
+  image_path VARCHAR(255)
+);

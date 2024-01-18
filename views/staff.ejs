@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>HMS</title>
+
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/cards.css" />
+    <link rel="stylesheet" href="/css/welcome-text.css" />
+    <link rel="stylesheet" href="/css/cat-welcome.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+    <link rel="stylesheet" href="/css/NoticeBoard.css" />
+    
+  
+  </head>
+  <body>
+    <%- include('./header') %>
+
+    <!-- ======================================== 
+          Our Main Hero Section Start  
+    ========================================  -->
+    <main>
+      <section class="mid">
+        <section class="mid-left">
+          <ul class="menu-list">
+            <li>
+              <h1 class="welcome-text" style="font-size:30px; 
+                position: relative; 
+                text-align: center; 
+                background: 
+                url(/images/grd2.jpg); -webkit-background-clip: text; font-family: 'Gochi Hand', cursive;">
+                Hi, <%= username %>.
+              </h1>
+            </li>
+            <li><a class="menu-link menu-subtext" href="/staff/markatd">Mark Attendance</a></li>
+            <li><a class="menu-link menu-subtext" href="/staff/mainreq">Maintenance Requests</a></li>
+            <li><a class="menu-link menu-subtext" href="/staff/changepass">Change Password</a></li>
+            <li><a class="menu-link menu-subtext" href="/staff/signout">Sign Out</a></li>
+          </ul>
+        </section>
+    
+        <section class="mid-right" style="display: flex; flex-direction: column;">
+          <% if (typeof showChangePassForm !== 'undefined' && showChangePassForm !== null && showChangePassForm) { %>
+          <form action="/staff/changepass" method="post">
+            <h1 style="margin: 0 0 30px 0; text-align: center;">Change Password</h1>
+    
+            <fieldset>
+              <label for="opass">Old Password:</label>
+              <input type="password" id="opass" name="opass">
+    
+              <label for="npass">New Password:</label>
+              <input type="password" id="npass" name="npass">
+    
+              <label for="cnpass">Confirm New Password:</label>
+              <input type="password" id="cnpass" name="cnpass">
+            </fieldset>
+    
+            <button type="submit">Change Password</button>
+          </form>
+          <% } else if (typeof showMarkAttendance !== 'undefined' && showMarkAttendance !== null && showMarkAttendance) { %>
+          <form action="/staff/markattendance" method="post">
+            <h1 style="margin: 0 0 30px 0; text-align: center;">Mark Attendance</h1>
+            <table class="attendance-table">
+              <thead>
+                <tr>
+                  <th>Room</th>
+                  <th>Name</th>
+                  <th><%= today %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% students.forEach(student => { %>
+                <tr>
+                  <td><%= student.room %></td>
+                  <td><%= student.name %></td>
+                  <td>
+                    <input type="checkbox" name="attendance[<%= student.enrollment %>]" value="present">
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+            <button type="submit">Submit Attendance</button>
+          </form>
+          <% } else if (typeof showMaintenanceTable !== 'undefined' && showMaintenanceTable !== null && showMaintenanceTable) { %>
+          <form action="/staff/maintenanceview" method="post" style="width:auto">
+            <h1 style="margin: 0 0 30px 0; text-align: center;">Maintenance Requests</h1>
+            <table class="attendance-table">
+              <thead>
+                <tr>
+                  <th>Enrollment</th>
+                  <th>Room</th>
+                  <th>Request For</th>
+                  <th>Requested On</th>                 
+                  <th>Complete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% maintenanceRequests.forEach(request => { %>
+                <tr>
+                  <td><%= request.enrollment %></td>
+                  <td><%= request.room %></td>
+                  <td><%= request.request_for %></td>                  
+                  <td><%= request.requested_on %></td>
+                  <td>
+                    <input type="checkbox" name="complete[<%= request.id %>]" value="completed">
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+            <button type="submit">Complete Maintenance</button>
+          </form>
+          <% } else { %>
+          <h1 class="welcome-text" style="font-size:6vw;">Hi,</h1>
+          <h1 class="welcome-text" style="font-size:6vw;">What are you up to?</h1>
+          <% } %>
+        </section>
+      </section>
+    </main>
+    
+    
+    
+    
+
+     <!-- ======================================== 
+          Our Footer Section Start  
+    ========================================  -->
+    <%- include('./footer') %>
+
+    <!-- ======================================== 
+          Our JavaScript Section Start  
+    ========================================  -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    <script src="js/navbar.js"></script>
+  </body>
+</html>

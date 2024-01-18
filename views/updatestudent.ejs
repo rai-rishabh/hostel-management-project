@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>HMS</title>
+
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/cards.css" />
+    <link rel="stylesheet" href="/css/welcome-text.css" />
+    <link rel="stylesheet" href="/css/cat-welcome.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+    
+  
+  </head>
+  <body>
+    <%- include('./header') %>
+
+    <!-- ======================================== 
+          Our Main Hero Section Start  
+    ========================================  -->
+    <main>        
+      <section class="mid">
+        <section class="mid-left">
+            <ul class="menu-list">
+                <li><h1 class="welcome-text" 
+                    style="font-size:30px; 
+                    position: relative; 
+                    text-align: center; 
+                    background: url(/images/grd2.jpg); 
+                    -webkit-background-clip: text; 
+                    font-family: 'Gochi Hand', 
+                    cursive;">
+                    Hi, <%= username %>.</h1></li>
+                <li><a class="menu-link menu-subtext" href="/addstudent">Add Student</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/updatestud">Update Student Details</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/publishnotice">Write a Notice</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/notices">Notices</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/regstaff">Register Staff</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/regward">Register Warden</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/changepass">Change Password</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/signout">Sign Out</a></li>
+              </ul>
+           </section>
+
+           <section class="mid-right">
+            <!-- Right content with update student form -->
+                <form action="/admin/updatestudentdetails" method="POST">
+                  <label for="enrollment">Enrollment:</label>
+                  <input type="text" id="enrollment" name="enrollment" required>
+                  <button type="submit">Search</button>
+                </form>
+            
+                <% if (typeof student !== 'undefined' && student !== null) { %>
+                  <!-- Student Details Form -->
+                  <form action="/admin/updatestudent" method="POST">
+                    <fieldset>        
+                      <label for="enrollment">Enrollment:</label>
+                      <input type="text" id="enrollment" name="enrollment" value="<%= student.enrollment %>" required readonly>
+                    
+                      <label for="name">Name:</label>
+                      <input type="text" id="name" name="name" value="<%= student.name %>" required>
+                    
+                      <label for="phone">Phone Number:</label>
+                      <input type="tel" id="phone" name="phone" value="<%= student.phone %>" required>                 
+                        
+                      <label for="parentphone">Parent Phone Number:</label>
+                      <input type="tel" id="parentphone" name="parentphone" value="<%= student.parentphone %>" required>
+                    
+                      <label for="room">Room Number:</label>
+                      <input type="text" id="room" name="room" value="<%= student.room %>" required>
+                    
+                      <br>
+                    
+                      <fieldset> 
+                        <legend>Address:</legend>
+                    
+                        <label for="zipcode">Zipcode:</label>
+                        <input type="text" id="zipcode" name="zipcode" value="<%= student.zipcode %>" required>
+                    
+                        <label for="city">City:</label>
+                        <input type="text" id="city" name="city" value="<%= student.city %>" readonly>
+                    
+                        <label for="state">State:</label>
+                        <input type="text" id="state" name="state" value="<%= student.state %>" readonly>
+                                            
+                        <label for="address">Address:</label>
+                        <textarea id="address" name="address" style="resize: none;" required><%= student.address %></textarea>   
+                    
+                      </fieldset> 
+                    </fieldset>            
+                    <button type="submit">Update</button>
+                  </form>
+                <% } %>
+          </section>
+      </section>
+    </main>
+
+     <!-- ======================================== 
+          Our Footer Section Start  
+    ========================================  -->
+    <%- include('./footer') %>
+
+    <!-- ======================================== 
+          Our JavaScript Section Start  
+    ========================================  -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    <script src="js/navbar.js"></script>
+    <script>
+  
+        // Populate city and state fields using CSV file
+        fetch("../pincode-dataset.csv")
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to fetch city data");
+            }
+            return response.text();
+          })
+          .then(csv => {
+            const rows = csv.trim().split("\n").slice(1);
+            const zipcodes = rows.map(row => row.split(",")[0].trim());
+            const cities = rows.map(row => row.split(",")[1].trim());
+            const states = rows.map(row => row.split(",")[2].trim());
+    
+            // Update city and state fields when zipcode is entered
+            document.getElementById("zipcode").addEventListener("input", event => {
+              const enteredZipcode = event.target.value;
+              const index = zipcodes.indexOf(enteredZipcode);
+              if (index !== -1) {
+                const correspondingCity = cities[index];
+                const correspondingState = states[index];
+                document.getElementById("city").value = correspondingCity;
+                document.getElementById("state").value = correspondingState;
+              } else {
+                document.getElementById("city").value = "";
+                document.getElementById("state").value = "";
+              }
+            });
+    
+            })
+        .catch(error => {
+          console.error(error);
+        });
+    </script>
+  </body>
+</html>

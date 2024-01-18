@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Admin Home</title>
+
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/cards.css" />
+    <link rel="stylesheet" href="/css/welcome-text.css" />
+    <link rel="stylesheet" href="/css/cat-welcome.css" />
+    
+  
+  </head>
+  <body>
+    <%- include('./header') %>
+
+    <!-- ======================================== 
+          Our Main Hero Section Start  
+    ========================================  -->
+    <main>        
+      <section class="mid">
+        <section class="mid-left">
+            <ul class="menu-list">
+                <li><h1 class="welcome-text" 
+                    style="font-size:30px; 
+                    position: relative; 
+                    text-align: center; 
+                    background: url(images/grd2.jpg); 
+                    -webkit-background-clip: text; 
+                    font-family: 'Gochi Hand', 
+                    cursive;">
+                    Hi, <%= username %>.</h1></li>
+                <li><a class="menu-link menu-subtext" href="/addstudent">Add Student</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/updatestud">Update Student Details</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/publishnotice">Write a Notice</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/notices">Notices</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/regstaff">Register Staff</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/regward">Register Warden</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/changepass">Change Password</a></li>
+                <li><a class="menu-link menu-subtext" href="/admin/signout">Sign Out</a></li>
+              </ul>
+           </section>
+
+          <section class="mid-right" style="display: flex; flex-direction: column;">
+            <h1 class="welcome-text" style="font-size:6vw;">Hi,</h1>
+            <h1 class="welcome-text" style="font-size:6vw;">What are you upto?</h1>
+          </section>
+      </section>
+    </main>
+
+     <!-- ======================================== 
+          Our Footer Section Start  
+    ========================================  -->
+    <%- include('./footer') %>
+
+    <!-- ======================================== 
+          Our JavaScript Section Start  
+    ========================================  -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    <script src="js/navbar.js"></script>
+  </body>
+</html>

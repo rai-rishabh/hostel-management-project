@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>HMS</title>
+
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/cards.css" />
+    <link rel="stylesheet" href="/css/welcome-text.css" />
+    <link rel="stylesheet" href="/css/cat-welcome.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+    <link rel="stylesheet" href="/css/NoticeBoard.css" />
+
+   
+    
+  
+  </head>
+  <body>
+    <%- include('./header') %>
+
+    <!-- ======================================== 
+          Our Main Hero Section Start  
+    ========================================  -->
+    <main>
+      <section class="mid">
+        <section class="mid-left" style="height: inherit;">
+          <ul class="menu-list">
+            <li>
+              <h1 class="welcome-text" style="font-size:30px; 
+                position: relative; 
+                text-align: center; 
+                background: 
+                url(/images/grd2.jpg); -webkit-background-clip: text; font-family: 'Gochi Hand', cursive;">
+                Hi, <%= username %>.
+              </h1>
+            </li>
+            <!-- <li><a class="menu-link menu-subtext" href="/student/attendance">View Attendance</a></li> -->
+            <li><a class="menu-link menu-subtext" href="/student/leavestatus">leave status</a></li>
+            <li><a class="menu-link menu-subtext" href="/student/leaveapply">Apply For Leave</a></li>
+            <li><a class="menu-link menu-subtext" href="/student/mainapply">Request Maintenance</a></li>            
+            <li><a class="menu-link menu-subtext" href="/student/changepass">Change Password</a></li>
+            <li><a class="menu-link menu-subtext" href="/student/signout">Sign Out</a></li>
+          </ul>
+        </section>
+    
+        <section class="mid-right" style="display: flex;flex-direction: column;">
+          <% if (typeof showChangePassForm !== 'undefined' && showChangePassForm !== null && showChangePassForm) { %>
+          <form action="/studentchangepass" method="post">
+            <h1 style="margin: 0 0 30px 0; text-align: center;">Change Password</h1>
+    
+            <fieldset>
+              <label for="opass">Old Password:</label>
+              <input type="password" id="opass" name="opass">
+    
+              <label for="npass">New Password:</label>
+              <input type="password" id="npass" name="npass">
+    
+              <label for="cnpass">Confirm New Password:</label>
+              <input type="password" id="cnpass" name="cnpass">
+            </fieldset>
+    
+            <button type="submit">Change Password</button>
+          </form>
+          <% } else if (typeof reqmaintenance !== 'undefined' && reqmaintenance !== null && reqmaintenance) { %>
+            <form action="/reqmaint" method="post">
+              <h1 style="margin: 0 0 30px 0; text-align: center;">Maintenance Request</h1>
+              
+              <fieldset>        
+             
+                <label for="mreq">Request For:</label>
+                <textarea id="mreq" name="mreq" style="resize: none; height:100px;"></textarea>                 
+              
+              </fieldset>            
+              <button type="submit">Request</button>        
+             </form> 
+            
+          <% }else if (typeof leaveapp !== 'undefined' && leaveapp !== null && leaveapp) { %>
+            <form method="POST" action="/process_leave">
+              <label for="from_date">From Date:</label>
+              <input type="date" id="from_date" name="from_date" required onchange="calculateDays()">
+          
+              <label for="to_date">To Date:</label>
+              <input type="date" id="to_date" name="to_date" required onchange="calculateDays()">
+          
+            
+              <fieldset> 
+          
+                <legend>Address on leave :</legend>
+          
+                <label for="zipcode">Zipcode:</label>
+                <input type="text" id="zipcode" name="zipcode" required>
+          
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" readonly>
+          
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state" readonly>
+                      
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" style="resize: none;" required></textarea>   
+              
+              </fieldset> 
+          
+              <label for="reason">Reason:</label>
+              <textarea id="reason" name="reason" rows="4" required></textarea>
+          
+              <label for="no_of_days">Number of Days:</label>
+              <input type="text" id="no_of_days" name="no_of_days" readonly>
+
+              <!-- <label for="image">Permision Image:</label>
+              <input type="file" id="image" name="image"> -->
+          
+              <input type="submit" value="Submit">
+            </form> 
+            <%}
+                    else if (typeof showapplicationstatus !== 'undefined' && showapplicationstatus !== null && showapplicationstatus) { %>
+                      <div style="display: flex; flex-direction: row;"></div>
+            <% leaveapplications.forEach(function(application) { %>
+            
+              <div class="leave-container">
+              <h2>Leave status</h2>
+              <p><%= application.name %>,</p>
+
+              <% if (application.status === 'approved') { %>
+                <p class="approved">We are pleased to inform you that your leave application has been approved.</p>
+              <% } else if (application.status === 'rejected') { %>
+                <p>We regret to inform you that your leave application has been rejected.</p>
+              <% } else { %>
+                <p>Your leave application is currently under review. We will notify you of the status soon.</p>
+              <% } %>
+
+              <% if (application.status === 'approved') { %>
+                <p>The details of your leave are as follows:</p>
+
+                <ul>
+                  <li>Username: <%= application.username %></li>
+                  <li>Name: <%= application.name %></li>
+                  <li>Room Number: <%= application.room_no %></li>
+                  <li>From: <%= application.from_date %></li>
+                  <li>To: <%= application.to_date %></li>
+                  <li>Zipcode: <%= application.zipcode %></li>
+                  <li>City: <%= application.city %></li>
+                  <li>State: <%= application.state %></li>
+                  <li>Address: <%= application.address %></li>
+                  <li>Reason: <%= application.reason %></li>
+                  <li>Number of Days: <%= application.no_of_days %></li>
+                </ul>
+              <% } %>
+            </div>
+              </div>
+          <% }); %>
+        <% } 
+          else { %>
+          <h1 class="welcome-text" style="font-size:6vw;">Hi,</h1>
+          <h1 class="welcome-text" style="font-size:6vw;">What are you up to?</h1>
+          <% } %>
+        </section>
+      </section>
+    </main>
+    
+    
+    
+    
+
+     <!-- ======================================== 
+          Our Footer Section Start  
+    ========================================  -->
+    <%- include('./footer') %>
+
+    <!-- ======================================== 
+          Our JavaScript Section Start  
+    ========================================  -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    <script src="js/navbar.js"></script>
+    <script>
+		// Calculate number of days
+		function calculateDays() {
+			var from_date = new Date(document.getElementById("from_date").value);
+			var to_date = new Date(document.getElementById("to_date").value);
+			var diff_in_time = to_date.getTime() - from_date.getTime();
+			var diff_in_days = Math.ceil(diff_in_time / (1000 * 3600 * 24)) + 1;
+			document.getElementById("no_of_days").value = diff_in_days;
+		}
+
+		// Set min attribute of date inputs to current date
+		document.getElementById("from_date").setAttribute("min", new Date().toISOString().slice(0,10));
+		document.getElementById("to_date").setAttribute("min", new Date().toISOString().slice(0,10));
+
+		fetch("../pincode-dataset.csv")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch city data");
+          }
+          return response.text();
+        })
+        .then(csv => {
+          const rows = csv.trim().split("\n").slice(1);
+          const zipcodes = rows.map(row => row.split(",")[0].trim());
+          const cities = rows.map(row => row.split(",")[1].trim());
+		  const states = rows.map(row => row.split(",")[2].trim());
+  
+  // Update city and state fields when zipcode is entered
+  document.getElementById("zipcode").addEventListener("input", event => {
+	const enteredZipcode = event.target.value;
+	const index = zipcodes.indexOf(enteredZipcode);
+	if (index !== -1) {
+	  const correspondingCity = cities[index];
+	  const correspondingState = states[index];
+	  document.getElementById("city").value = correspondingCity;
+	  document.getElementById("state").value = correspondingState;
+	} else {
+	  document.getElementById("city").value = "";
+	  document.getElementById("state").value = "";
+	}
+  });
+
+  // Calculate number of days initially
+  calculateDays();
+})
+.catch(error => {
+  console.error(error);
+});
+</script>
+  </body>
+</html>

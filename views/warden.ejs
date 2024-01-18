@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>HMS</title>
+
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/cards.css" />
+    <link rel="stylesheet" href="/css/welcome-text.css" />
+    <link rel="stylesheet" href="/css/cat-welcome.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+    <link rel="stylesheet" href="/css/NoticeBoard.css" />
+
+   
+    
+  
+  </head>
+  <body>
+    <%- include('./header') %>
+
+    <!-- ======================================== 
+          Our Main Hero Section Start  
+    ========================================  -->
+    <main>
+      <section class="mid">
+        <section class="mid-left" style="height: inherit;">
+          <ul class="menu-list">
+            <li>
+              <h1 class="welcome-text" style="font-size:30px; 
+                position: relative; 
+                text-align: center; 
+                background: 
+                url(/images/grd2.jpg); -webkit-background-clip: text; font-family: 'Gochi Hand', cursive;">
+                Hi, <%= username %>.
+              </h1>
+            </li>
+            <li><a class="menu-link menu-subtext" href="/warden/publishnotice">Write a Notice</a></li>
+            <li><a class="menu-link menu-subtext" href="/warden/notices">Notices</a></li>
+            <li><a class="menu-link menu-subtext" href="/warden/leave">leave Applications</a></li>
+            <li><a class="menu-link menu-subtext" href="/warden/studrec">Student Record </a></li>
+            <li><a class="menu-link menu-subtext" href="/warden/changepass">Change Password</a></li>
+            <li><a class="menu-link menu-subtext" href="/warden/signout">Sign Out</a></li>
+          </ul>
+        </section>
+    
+        <section class="mid-right" style="display: flex;flex-direction: column;">
+          <% if (typeof showChangePassForm !== 'undefined' && showChangePassForm !== null && showChangePassForm) { %>
+          <form action="/wardenchangepass" method="post">
+            <h1 style="margin: 0 0 30px 0; text-align: center;">Change Password</h1>
+    
+            <fieldset>
+              <label for="opass">Old Password:</label>
+              <input type="password" id="opass" name="opass">
+    
+              <label for="npass">New Password:</label>
+              <input type="password" id="npass" name="npass">
+    
+              <label for="cnpass">Confirm New Password:</label>
+              <input type="password" id="cnpass" name="cnpass">
+            </fieldset>
+    
+            <button type="submit">Change Password</button>
+          </form>
+          <% } else if (typeof wardenpublishnotice !== 'undefined' && wardenpublishnotice !== null && wardenpublishnotice) { %>
+            <form action="/wardenpublishnotice" method="post">
+              <h1 style="margin: 0 0 30px 0; text-align: center;">Notice</h1>
+              
+              <fieldset>        
+                <label for="heading">Heading:</label>
+                <input type="text" id="heading" name="heading">
+             
+                <label for="nbody">Notice Body:</label>
+                <textarea id="nbody" name="nbody" style="resize: none; height:100px;"></textarea>                 
+              
+              </fieldset>            
+              <button type="submit">Publish</button>        
+             </form>
+          <% }else if (typeof wardennotice !== 'undefined' && wardennotice !== null && wardennotice) { %>
+            <h1>Notices</h1>
+            
+                
+                <table class="attendance-table" style="width: auto;">
+                <thead>
+                    <tr>
+                    <th>Heading</th>
+                    <th>Notice Body</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% notices.forEach(function(notice) { %>
+                    <tr>
+                        <td><%= notice.heading %></td>
+                        <td><%= notice.nbody %></td>
+                        <td><%= notice.created_at %></td>
+                        <td>
+                        <form action="/warden-delete-notice" method="POST" style="width:auto; height: auto; background-color: inherit;">
+                            <input type="hidden" name="noticeId" value="<%= notice.id %>">
+                            <button type="submit" class="delete-button" style="width:auto">Delete</button>
+                        </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+                </table>
+            
+          <% }else if (typeof studentrecord !== 'undefined' && studentrecord !== null && studentrecord) { %>
+                <form action="/warden/viewstudentrec" method="POST">
+                  <label for="enrollment">Enrollment:</label>
+                  <input type="text" id="enrollment" name="enrollment" required>
+                  <button type="submit">Search</button>
+                </form>
+            
+                <% if (typeof student !== 'undefined' && student !== null && student) { %>
+                  <!-- Student Details Form -->
+                  <form>
+                    <fieldset>        
+                      <label for="enrollment">Enrollment:</label>
+                      <input type="text" id="enrollment" name="enrollment" value="<%= student.enrollment %>" readonly>
+                    
+                      <label for="name">Name:</label>
+                      <input type="text" id="name" name="name" value="<%= student.name %>" readonly>
+                    
+                      <label for="phone">Phone Number:</label>
+                      <input type="tel" id="phone" name="phone" value="<%= student.phone %>" readonly>                 
+                        
+                      <label for="parentphone">Parent Phone Number:</label>
+                      <input type="tel" id="parentphone" name="parentphone" value="<%= student.parentphone %>" readonly>
+                    
+                      <label for="room">Room Number:</label>
+                      <input type="text" id="room" name="room" value="<%= student.room %>" readonly>
+                    
+                      <br>
+                    
+                      <fieldset> 
+                        <legend>Address:</legend>
+                    
+                        <label for="zipcode">Zipcode:</label>
+                        <input type="text" id="zipcode" name="zipcode" value="<%= student.zipcode %>" readonly>
+                    
+                        <label for="city">City:</label>
+                        <input type="text" id="city" name="city" value="<%= student.city %>" readonly>
+                    
+                        <label for="state">State:</label>
+                        <input type="text" id="state" name="state" value="<%= student.state %>" readonly>
+                                            
+                        <label for="address">Address:</label>
+                        <textarea id="address" name="address" style="resize: none;" readonly><%= student.address %></textarea>   
+                    
+                      </fieldset> 
+                    </fieldset>            
+                  </form>
+                <% } %>
+                
+                    <% }else if (typeof leaveapplications !== 'undefined' && leaveapplications !== null && leaveapplications.length > 0) { %>
+                      <h1>Leave Applications</h1>
+                                
+                      <table class="attendance-table" style="width: 80%;">
+                        <thead>
+                          <tr>
+                            <th>Enrollment</th>
+                            <th>Name</th>
+                            <th>Room No</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Reason</th>
+                            <th>No of Days</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% leaveapplications.forEach(function(application) { %>
+                            <% if (application.status !== 'approved') { %>
+                              <tr>
+                                <td><%= application.username %></td>
+                                <td><%= application.name %></td>
+                                <td><%= application.room_no %></td>
+                                <td><%= application.from_date %></td>
+                                <td><%= application.to_date %></td>
+                                <td><%= application.reason %></td>
+                                <td><%= application.no_of_days %></td>
+                                <td><%= application.status %></td>
+                                <td>
+                                  <form action="/warden-approve-leave" method="POST" style="width:auto; height: auto; background-color: inherit;">
+                                    <input type="hidden" name="leaveId" value="<%= application.id %>">
+                                    <button type="submit" class="approve-button">Approve</button>
+                                  </form>
+                                  <form action="/warden-reject-leave" method="POST" style="width:auto; height: auto; background-color: inherit;">
+                                    <input type="hidden" name="leaveId" value="<%= application.id %>">
+                                    <button type="submit" class="reject-button">Reject</button>
+                                  </form>
+                                </td>
+                              </tr>
+                            <% } %>
+                          <% }); %>
+                        </tbody>
+                      </table>
+                    <% }
+          else { %>
+          <h1 class="welcome-text" style="font-size:6vw;">Hi,</h1>
+          <h1 class="welcome-text" style="font-size:6vw;">What are you up to?</h1>
+          <% } %>
+        </section>
+      </section>
+    </main>
+    
+    
+    
+    
+
+     <!-- ======================================== 
+          Our Footer Section Start  
+    ========================================  -->
+    <%- include('./footer') %>
+
+    <!-- ======================================== 
+          Our JavaScript Section Start  
+    ========================================  -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    <script src="js/navbar.js"></script>
+    <script>
+  
+      // Populate city and state fields using CSV file
+      fetch("../pincode-dataset.csv")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch city data");
+          }
+          return response.text();
+        })
+        .then(csv => {
+          const rows = csv.trim().split("\n").slice(1);
+          const zipcodes = rows.map(row => row.split(",")[0].trim());
+          const cities = rows.map(row => row.split(",")[1].trim());
+          const states = rows.map(row => row.split(",")[2].trim());
+  
+          // Update city and state fields when zipcode is entered
+          document.getElementById("zipcode").addEventListener("input", event => {
+            const enteredZipcode = event.target.value;
+            const index = zipcodes.indexOf(enteredZipcode);
+            if (index !== -1) {
+              const correspondingCity = cities[index];
+              const correspondingState = states[index];
+              document.getElementById("city").value = correspondingCity;
+              document.getElementById("state").value = correspondingState;
+            } else {
+              document.getElementById("city").value = "";
+              document.getElementById("state").value = "";
+            }
+          });
+  
+          })
+      .catch(error => {
+        console.error(error);
+      });
+  </script>
+  </body>
+</html>
